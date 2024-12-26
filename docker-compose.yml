@@ -1,0 +1,42 @@
+services:
+  api:
+    build: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: rebuild
+          path: ./
+          ignore:
+            - ./.github
+            - ./.vscode
+            - ./.git
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpasswd
+      - MONGO_INITDB_DATABASE=${MONGO_DB}
+    env_file:
+      - .env
+    volumes:
+      - mongo:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 1s
+
+volumes:
+  mongo:

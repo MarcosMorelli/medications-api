@@ -1,0 +1,9 @@
+.dockerignore
+.env
+.gitignore
+docker-compose.yml
+Dockerfile
+init-mongo.js
+lICENSE
+Makefile
+README.md
