@@ -12,10 +12,6 @@ services:
       watch:
         - action: rebuild
           path: ./
-          ignore:
-            - ./.github
-            - ./.vscode
-            - ./.git
 
   mongo:
     image: mongo:latest
